@@ -22,6 +22,45 @@ class secMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+
+        ######
+
+        from plogical.processUtilities import ProcessUtilities
+        FinalURL = request.build_absolute_uri().split('?')[0]
+
+        from urllib.parse import urlparse
+        pathActual = urlparse(FinalURL).path
+
+        if os.path.exists(ProcessUtilities.debugPath):
+            logging.writeToFile(f'Path vs the final url : {pathActual}')
+            logging.writeToFile(FinalURL)
+
+        if pathActual == '/' or pathActual == '/verifyLogin' or pathActual == '/logout' or pathActual.startswith('/api')\
+                or pathActual.endswith('/webhook') or pathActual.startswith('/cloudAPI') or pathActual.endswith('/gitNotify'):
+            pass
+        else:
+            try:
+                val = request.session['userID']
+            except:
+                if bool(request.body):
+                    final_dic = {
+                        'error_message': "This request need session.",
+                        "errorMessage": "This request need session."}
+                    final_json = json.dumps(final_dic)
+                    return HttpResponse(final_json)
+                else:
+                    from django.shortcuts import redirect
+                    from loginSystem.views import loadLoginPage
+                    return redirect(loadLoginPage)
+
+        # if os.path.exists(ProcessUtilities.debugPath):
+        #     logging.writeToFile(f'Final actual URL without QS {FinalURL}')
+
+        if os.path.exists(ProcessUtilities.debugPath):
+            logging.writeToFile(f'Request method {request.method.lower()}')
+
+        ##########################
+
         try:
             uID = request.session['userID']
             admin = Administrator.objects.get(pk=uID)
@@ -53,26 +92,7 @@ class secMiddleware:
         except:
             pass
 
-        from plogical.processUtilities import ProcessUtilities
-        FinalURL = request.build_absolute_uri().split('?')[0]
-
-        if os.path.exists(ProcessUtilities.debugPath):
-            logging.writeToFile(request.build_absolute_uri())
-            logging.writeToFile(FinalURL)
-
-
-        if FinalURL == '/' or FinalURL == '/verifyLogin' or FinalURL == '/logout':
-            if os.path.exists(ProcessUtilities.debugPath):
-                logging.writeToFile(request.build_absolute_uri())
-
-
-        # if os.path.exists(ProcessUtilities.debugPath):
-        #     logging.writeToFile(f'Final actual URL without QS {FinalURL}')
-
-        if os.path.exists(ProcessUtilities.debugPath):
-            logging.writeToFile(f'Request method {request.method.lower()}')
-
-        if request.method.lower() == 'post' or request.method.lower() == 'options':
+        if bool(request.body):
             try:
 
                 # logging.writeToFile(request.body)
@@ -154,6 +174,9 @@ class secMiddleware:
                 logging.writeToFile(str(msg))
                 response = self.get_response(request)
                 return response
+        else:
+            if os.path.exists(ProcessUtilities.debugPath):
+                logging.writeToFile('Request does not have a body.')
         # else:
         #     try:
         #         if request.path.find('cloudAPI/') > -1 or request.path.find('api/') > -1:

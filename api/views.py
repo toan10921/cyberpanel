@@ -92,7 +92,6 @@ def getPackagesListAPI(request):
         json_data = json.dumps(data_ret)
         return HttpResponse(json_data)
 
-
 @csrf_exempt
 def getUserInfo(request):
     try:
