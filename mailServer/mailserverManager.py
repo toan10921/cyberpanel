@@ -560,7 +560,8 @@ class MailServerManager(multi.Thread):
 
             if os.path.exists(postfixMapPath):
 
-                postfixMapData = open(postfixMapPath, 'r').read()
+                postfixMapData = open(postfixMapPath, 'r', encoding='utf-8').read()
+
 
                 if postfixMapData.find(selectedDomain) == -1:
                     mailConfigured = 0

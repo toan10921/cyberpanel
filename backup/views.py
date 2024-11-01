@@ -11,7 +11,6 @@ from backup.pluginManager import pluginManager
 from loginSystem.views import loadLoginPage
 import os
 from plogical.CyberCPLogFileWriter import CyberCPLogFileWriter as logging
-from django.shortcuts import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 def loadBackupHome(request):

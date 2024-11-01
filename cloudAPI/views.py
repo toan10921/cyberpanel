@@ -24,10 +24,13 @@ def router(request):
         if admin.api == 0:
             return cm.ajaxPre(0, 'API Access Disabled.')
 
-        if cm.verifyLogin(request)[0] == 1:
-            pass
-        else:
-            return cm.verifyLogin(request)[1]
+        try:
+            if cm.verifyLogin(request)[0] == 1:
+                pass
+            else:
+                return cm.verifyLogin(request)[1]
+        except BaseException as msg:
+            return cm.ajaxPre(0, f"Something went wrong during token processing. ErrorL {str(msg)}")
 
 
         ## Debug Log

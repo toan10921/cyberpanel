@@ -39,6 +39,8 @@ class secMiddleware:
                 or pathActual.endswith('/webhook') or pathActual.startswith('/cloudAPI') or pathActual.endswith('/gitNotify'):
             pass
         else:
+            if os.path.exists(ProcessUtilities.debugPath):
+                logging.writeToFile(f'Request needs session : {pathActual}')
             try:
                 val = request.session['userID']
             except:
@@ -94,6 +96,9 @@ class secMiddleware:
 
         if bool(request.body):
             try:
+
+                if os.path.exists(ProcessUtilities.debugPath):
+                    logging.writeToFile('Request body detected.. scanning')
 
                 # logging.writeToFile(request.body)
                 data = json.loads(request.body)

@@ -48,7 +48,6 @@ def verifyConn(request):
                 data_ret = {"verifyConn": 0}
                 json_data = json.dumps(data_ret)
                 return HttpResponse(json_data)
-
     except BaseException as msg:
         data_ret = {'verifyConn': 0, 'error_message': str(msg)}
         json_data = json.dumps(data_ret)
