@@ -6623,11 +6623,15 @@ StrictHostKeyChecking no
 
             key = data['key']
             pathToKeyFile = "/home/%s/.ssh/authorized_keys" % (domain)
+            website = Websites.objects.get(domain=domain)
+
+            command = f'chown {website.externalApp}:{website.externalApp} {pathToKeyFile}'
+            ProcessUtilities.outputExecutioner(command)
 
             execPath = "/usr/local/CyberCP/bin/python " + virtualHostUtilities.cyberPanel + "/plogical/firewallUtilities.py"
             execPath = execPath + " deleteSSHKey --key '%s' --path %s" % (key, pathToKeyFile)
 
-            output = ProcessUtilities.outputExecutioner(execPath)
+            output = ProcessUtilities.outputExecutioner(execPath, website.externalApp)
 
             if output.find("1,None") > -1:
                 final_dic = {'status': 1, 'delete_status': 1}

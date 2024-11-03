@@ -144,7 +144,9 @@ class secMiddleware:
                         'cloudAPI') > -1 or FinalURL.find(
                         'verifyLogin') > -1 or FinalURL.find('submitUserCreation') > -1:
                         continue
-                    if key == 'ownerPassword' or key == 'scriptUrl' or key == 'CLAMAV_VIRUS' or key == "Rspamdserver" or key == 'smtpd_milters' or key == 'non_smtpd_milters' or key == 'key' or key == 'cert' or key == 'recordContentAAAA' or key == 'backupDestinations' or key == 'ports' \
+                    if key == 'ownerPassword' or key == 'scriptUrl' or key == 'CLAMAV_VIRUS' or key == "Rspamdserver" or key == 'smtpd_milters' \
+                            or key == 'non_smtpd_milters' or key == 'key' or key == 'cert' or key == 'recordContentAAAA' or key == 'backupDestinations'\
+                            or key == 'ports' \
                             or key == 'imageByPass' or key == 'passwordByPass' or key == 'PasswordByPass' or key == 'cronCommand' \
                             or key == 'emailMessage' or key == 'configData' or key == 'rewriteRules' \
                             or key == 'modSecRules' or key == 'recordContentTXT' or key == 'SecAuditLogRelevantStatus' \
@@ -176,9 +178,10 @@ class secMiddleware:
                         return HttpResponse(final_json)
 
             except BaseException as msg:
-                logging.writeToFile(str(msg))
-                response = self.get_response(request)
-                return response
+                final_dic = {'error_message': f"Error: {str(msg)}",
+                             "errorMessage":  f"Error: {str(msg)}"}
+                final_json = json.dumps(final_dic)
+                return HttpResponse(final_json)
         else:
             if os.path.exists(ProcessUtilities.debugPath):
                 logging.writeToFile('Request does not have a body.')
@@ -197,8 +200,7 @@ class secMiddleware:
         response['X-Frame-Options'] = "sameorigin"
         response['Content-Security-Policy'] = "script-src 'self' https://www.jsdelivr.com"
         response['Content-Security-Policy'] = "connect-src *;"
-        response[
-            'Content-Security-Policy'] = "font-src 'self' 'unsafe-inline' https://www.jsdelivr.com https://fonts.googleapis.com"
+        response['Content-Security-Policy'] = "font-src 'self' 'unsafe-inline' https://www.jsdelivr.com https://fonts.googleapis.com"
         response[
             'Content-Security-Policy'] = "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.jsdelivr.com https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com https://cdn.jsdelivr.net"
         # response['Content-Security-Policy'] = "default-src 'self' cyberpanel.cloud *.cyberpanel.cloud"

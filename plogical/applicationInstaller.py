@@ -2433,7 +2433,7 @@ class ApplicationInstaller(multi.Thread):
             logging.statusWriter(self.tempStatusPath, 'Creating database backup..,10')
 
             command = f'{FinalPHPPath} -d error_reporting=0 /usr/bin/wp --allow-root --skip-plugins --skip-themes --path={StagingSite.path} db export {self.tempPath}/dbexport-stage.sql'
-            if ProcessUtilities.executioner(command) == 0:
+            if ProcessUtilities.executioner(command, StagingSite.owner.externalApp) == 0:
                 raise BaseException('Failed to create database backup of staging site. [404]')
 
             command = f'{FinalPHPPath} -d error_reporting=0 /usr/bin/wp theme path --skip-plugins --skip-themes --allow-root --path={WPSite.path}'
@@ -5465,7 +5465,9 @@ class ApplicationInstaller(multi.Thread):
 
                 command = f"ls -lh {self.tempPath}/ab"
                 result, stdout = ProcessUtilities.outputExecutioner(command, None, None, None, 1)
-                logging.writeToFile(f'Listing files {str(stdout)}')
+
+                if os.path.exists(ProcessUtilities.debugPath):
+                    logging.writeToFile(f'Listing files {str(stdout)}')
 
 
             ##### Check if Backup type is Only Database
@@ -5991,7 +5993,7 @@ class ApplicationInstaller(multi.Thread):
                         #### replace db user
 
                         command = f'''sed -i "s/define( 'DB_USER', '.*' );/define( 'DB_USER', '{Finaldbuser}' );/" {WPpath}wp-config.php'''
-                        result, stdout = ProcessUtilities.outputExecutioner(command, None, None, None, 1)
+                        result, stdout = ProcessUtilities.outputExecutioner(command, VHuser, None, None, 1)
 
                         if result == 0:
                             raise BaseException(stdout)
@@ -6000,7 +6002,7 @@ class ApplicationInstaller(multi.Thread):
                         ### replace db name
 
                         command = f'''sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '{Finaldbname}' );/" {WPpath}wp-config.php'''
-                        result, stdout = ProcessUtilities.outputExecutioner(command, None, None, None, 1)
+                        result, stdout = ProcessUtilities.outputExecutioner(command, VHuser, None, None, 1)
 
                         if result == 0:
                             raise BaseException(stdout)

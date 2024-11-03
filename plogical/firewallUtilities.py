@@ -6,7 +6,10 @@ import sys
 import django
 sys.path.append('/usr/local/CyberCP')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "CyberCP.settings")
-django.setup()
+try:
+    django.setup()
+except:
+    pass
 
 import plogical.CyberCPLogFileWriter as logging
 import argparse
