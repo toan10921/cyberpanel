@@ -99,9 +99,14 @@ class secMiddleware:
 
                 if os.path.exists(ProcessUtilities.debugPath):
                     logging.writeToFile('Request body detected.. scanning')
+                    logging.writeToFile(str(request.body))
 
                 # logging.writeToFile(request.body)
-                data = json.loads(request.body)
+                try:
+                    data = json.loads(request.body)
+                except:
+                    data = request.POST
+
                 for key, value in data.items():
                     if request.path.find('gitNotify') > -1:
                         break
@@ -206,5 +211,7 @@ class secMiddleware:
         # response['Content-Security-Policy'] = "default-src 'self' cyberpanel.cloud *.cyberpanel.cloud"
         response['X-Content-Type-Options'] = "nosniff"
         response['Referrer-Policy'] = "same-origin"
+
+
 
         return response
