@@ -35,7 +35,7 @@ class secMiddleware:
             logging.writeToFile(f'Path vs the final url : {pathActual}')
             logging.writeToFile(FinalURL)
 
-        if pathActual == "/base/design" or pathActual == "/backup/localInitiate" or  pathActual == '/' or pathActual == '/verifyLogin' or pathActual == '/logout' or pathActual.startswith('/api')\
+        if pathActual == "/backup/localInitiate" or  pathActual == '/' or pathActual == '/verifyLogin' or pathActual == '/logout' or pathActual.startswith('/api')\
                 or pathActual.endswith('/webhook') or pathActual.startswith('/cloudAPI') or pathActual.endswith('/gitNotify'):
             pass
         else:
@@ -160,7 +160,7 @@ class secMiddleware:
                         'cloudAPI') > -1 or FinalURL.find(
                         'verifyLogin') > -1 or FinalURL.find('submitUserCreation') > -1:
                         continue
-                    if key == 'ownerPassword' or key == 'scriptUrl' or key == 'CLAMAV_VIRUS' or key == "Rspamdserver" or key == 'smtpd_milters' \
+                    if key == 'MainDashboardCSS' or key == 'ownerPassword' or key == 'scriptUrl' or key == 'CLAMAV_VIRUS' or key == "Rspamdserver" or key == 'smtpd_milters' \
                             or key == 'non_smtpd_milters' or key == 'key' or key == 'cert' or key == 'recordContentAAAA' or key == 'backupDestinations'\
                             or key == 'ports' \
                             or key == 'imageByPass' or key == 'passwordByPass' or key == 'PasswordByPass' or key == 'cronCommand' \
