@@ -11,8 +11,8 @@ try {
 
         ### Get credentials using the token
 
-        $token = $_POST['token'];
-        $username = $_POST['username'];
+        $token = htmlspecialchars($_POST['token'], ENT_QUOTES, 'UTF-8');
+        $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
 
         //$url = "/dataBases/fetchDetailsPHPMYAdmin?token=" . $token . '&username=' . $username;
         $url = "/dataBases/fetchDetailsPHPMYAdmin";
@@ -38,7 +38,7 @@ try {
         session_name(PMA_SIGNON_SESSIONNAME);
         @session_start();
 
-        $username = $_POST['username'];
+        $username = htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8');
         $password = $_POST['password'];
 
         $_SESSION['PMA_single_signon_user'] = $username;
