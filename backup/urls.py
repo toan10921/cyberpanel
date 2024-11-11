@@ -61,6 +61,7 @@ urlpatterns = [
 
     re_path(r'^localInitiate$', views.localInitiate, name='localInitiate'),
 
+
     re_path(r'^backupLogs$', views.backupLogs, name='backupLogs'),
     re_path(r'^fetchLogs$', views.fetchLogs, name='fetchLogs'),
     re_path(r'^fetchgNormalSites$', views.fetchgNormalSites, name='fetchgNormalSites'),
