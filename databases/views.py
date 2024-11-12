@@ -400,7 +400,6 @@ def getMysqlstatus(request):
 def restartMySQL(request):
     try:
         userID = request.session['userID']
-        finalData = mysqlUtilities.restartMySQL()
         currentACL = ACLManager.loadedACL(userID)
 
         if currentACL['admin'] == 1:
@@ -409,6 +408,8 @@ def restartMySQL(request):
             return ACLManager.loadErrorJson('FilemanagerAdmin', 0)
 
         data = {}
+
+        finalData = mysqlUtilities.restartMySQL()
 
         data['status'] = finalData[0]
         data['error_message'] = finalData[1]
