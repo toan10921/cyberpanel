@@ -421,9 +421,15 @@ def localInitiate(request):
         data = json.loads(request.body)
         randomFile = data['randomFile']
 
-        if os.path.exists(randomFile):
-            wm = BackupManager()
-            return wm.submitBackupCreation(1, json.loads(request.body))
+        try:
+            randInt = int(randomFile)
+            pathToFile = "/home/cyberpanel/" + randomFile
+
+            if os.path.exists(pathToFile):
+                wm = BackupManager()
+                return wm.submitBackupCreation(1, json.loads(request.body))
+        except:
+            pass
     except BaseException as msg:
         logging.writeToFile(str(msg))
 
